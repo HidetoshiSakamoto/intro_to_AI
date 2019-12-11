@@ -133,7 +133,7 @@ def main():
     model = Sonar_Model(dimension=60)
     trainer = Sonar_Trainer(model)
     trainer.train(1e-4, 10**3)
-    model.save_model('./jupyter/saved_models/sonar_model.pkl')
+    model.save_model('./saved_models/sonar_model.pkl')
 
 if __name__ == '__main__':
     main()
