@@ -145,7 +145,7 @@ class Digits_Trainer:
 def main():
 
     data = Digits_Data()
-    model = Digits_Model(n_data=data.data.shape[0], dim_input=data.data[0][0].shape[0], dim_hidden=16, dim_out=data.data[0][1].shape[0], activation1=sigmoid, activation2=softmax)
+    model = Digits_Model(n_data=data.data.shape[0], dim_input=data.data[0][0].shape[0], dim_hidden=100, dim_out=data.data[0][1].shape[0], activation1=sigmoid, activation2=softmax)
     trainer = Digits_Trainer(data, model)
     trainer.train(0.5, 10**3)
     if not os.path.exists('./saved_models'):
