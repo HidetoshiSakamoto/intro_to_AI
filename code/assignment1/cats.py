@@ -1,38 +1,16 @@
-################################################################################
-#                                                                              #
-#                               INTRODUCTION                                   #
-#                                                                              #
-################################################################################
-
-# In order to help you with the first assignment, this file provides a general
-# outline of your program. You will implement the details of various pieces of
-# Python code grouped in functions. Those functions are called within the main
-# function, at the end of this source file. Please refer to the lecture slides
-# for the background behind this assignment.
-# You will submit three python files (sonar.py, cat.py, digits.py) and three
-# pickle files (sonar_model.pkl, cat_model.pkl, digits_model.pkl) which contain
-# trained models for each tasks.
-# Good luck!
-
-################################################################################
-#                                                                              #
-#                                    CODE                                      #
-#                                                                              #
-################################################################################
-
 import numpy as np
 import pickle as pkl
 import random
+import os
 
 def sigmoid(z):
     return 1.0 / (1.0 + np.exp(-z))
-
 def lrpredict(self, x): 
     return 1 if self(x)>0.5 else 0
 
 class Cat_Model:
-
-    def __init__(self, dimension=None, weights=None, bias=None, activation=(lambda x: x), predict=None):
+    
+    def __init__(self, dimension=None, weights=None, bias=None, activation=(lambda x: x), predict = (lambda x: x)):
         self._dim = dimension
         self.w = weights or np.random.normal(size=self._dim)
         self.w = np.array(self.w)
@@ -41,11 +19,7 @@ class Cat_Model:
         self.predict = predict.__get__(self)
 
     def __str__(self):
-        info = "Simple cell neuron\n\
-        \tInput dimension: %d\n\
-        \tBias: %f\n\
-        \tWeights: %s\n\
-        \tActivation: %s" % (self._dim, self.b, self.w, self._a.__name__)
+        info = "Simple cell neuron\n        \tInput dimension: %d\n        \tBias: %f\n        \tWeights: %s\n        \tActivation: %s" % (self._dim, self.b, self.w, self._a.__name__)
         return info
 
     def __call__(self, x):
@@ -56,17 +30,17 @@ class Cat_Model:
         with open(file_path, mode='rb') as f:
             saved_model = pkl.load(f)
         return saved_model
-
+    
     def save_model(self, file_path):
         with open(file_path, mode='wb') as f:
             pkl.dump(self, f)
 
 class Cat_Trainer:
-        
+
     def lrloss(yhat, y):
         return -1 if z<=0 else 1   
     
-    def __init__(self,model, loss = lrloss):
+    def __init__(self, model, loss = lrloss):
         self.model = model
         self.loss = loss
 
@@ -93,7 +67,7 @@ class Cat_Trainer:
                 print('>epoch=%d, learning_rate=%.3f, accuracy=%.3f' % (epoch+1, lr, accuracy))
             
         print("training complete")
-        print("final accuracy: %.3f" % (self.accuracy(Cat_Data(type_="test"))))
+        print("final accuracy: %.3f" % (self.accuracy(Cat_Data())))
 
 class Cat_Data:
 
@@ -109,7 +83,7 @@ class Cat_Data:
         self.index = 0
         self.data = data
         self.n_data = len(data)
-        
+    
     def __iter__(self):
         return self
 
@@ -124,10 +98,12 @@ class Cat_Data:
 
 def main():
 
-    model = Cat_Model(dimension=12288, activation=sigmoid, predict=lrpredict)   
+    model = Cat_Model(dimension=12288, activation=sigmoid, predict=lrpredict)
     trainer = Cat_Trainer(model)
-    trainer.train(1e-3, 10**3) 
+    trainer.train(1e-4, 10**3)
+    if not os.path.exists('./saved_models'):
+        os.mkdir('./saved_models')
     model.save_model('./saved_models/cat_model.pkl')
-
+    
 if __name__ == '__main__':
     main()
